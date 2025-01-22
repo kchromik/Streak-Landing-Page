@@ -6,6 +6,20 @@
     <title>Your Amazing App</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        :root {
+            --bg-color: #fff;
+            --text-color: #1f2937;
+            --feature-bg: #f3f4f6;
+            --footer-link: #6b7280;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1f2937;
+            --text-color: #f9fafb;
+            --feature-bg: #374151;
+            --footer-link: #9ca3af;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,9 +28,10 @@
         }
 
         body {
-            background: #fff;
-            color: #1f2937;
+            background: var(--bg-color);
+            color: var(--text-color);
             line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .container {
@@ -88,7 +103,7 @@
         }
 
         .feature {
-            background: #f3f4f6;
+            background: var(--feature-bg);
             padding: 2rem;
             border-radius: 1rem;
             text-align: center;
@@ -117,7 +132,7 @@
         }
 
         footer a {
-            color: #6b7280;
+            color: var(--footer-link);
             text-decoration: none;
             margin: 0 1rem;
             transition: color 0.2s;
@@ -142,9 +157,36 @@
         .waitlist-form {
             margin-top: 2rem;
         }
+
+        .theme-switch {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 100;
+            background: var(--feature-bg);
+            border: none;
+            padding: 0.75rem;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .theme-switch:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-switch i {
+            font-size: 1.25rem;
+            color: var(--text-color);
+        }
     </style>
 </head>
 <body>
+    <button class="theme-switch" aria-label="Toggle theme">
+        <i class="fas fa-moon"></i>
+    </button>
+
     <div class="container">
         <div class="hero">
             <div class="hero-content">
@@ -183,5 +225,30 @@
             <a href="https://kevinchromik.de/datenschutz/">Datenschutz</a>
         </footer>
     </div>
+
+    <script>
+        const themeSwitch = document.querySelector('.theme-switch');
+        const icon = themeSwitch.querySelector('i');
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateIcon(savedTheme === 'dark');
+        }
+
+        themeSwitch.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateIcon(newTheme === 'dark');
+        });
+
+        function updateIcon(isDark) {
+            icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+        }
+    </script>
 </body>
 </html> 
